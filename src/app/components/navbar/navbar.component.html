@@ -1,0 +1,43 @@
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="currentColor"/>
+          <circle cx="12" cy="12" r="6" fill="var(--card-bg)"/>
+        </svg>
+      </div>
+      <span class="logo-text">Aureo</span>
+    </div>
+  </div>
+
+  <div class="nav-items">
+    <a 
+      *ngFor="let item of navItems" 
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-item"
+    >
+      <i-lucide 
+        [img]="getIcon(item.icon)" 
+        size="20"
+        class="nav-icon"
+      ></i-lucide>
+      <span class="nav-text">{{ item.label }}</span>
+      <span *ngIf="item.notification" class="notification-badge">{{ item.notification }}</span>
+    </a>
+  </div>
+
+  <div class="user-profile">
+    <div class="profile-image">
+      <img src="https://github.com/EliottoDev.png" alt="Profile" />
+    </div>
+    <div class="profile-info">
+      <span class="profile-name">Elias D.E.</span>
+      <span class="profile-email">elias.dinarett&#64;gmail.com</span>
+    </div>
+    <button class="more-options">
+      <i-lucide [img]="MoreVerticalIcon" size="18"></i-lucide>
+    </button>
+  </div>
+</nav>

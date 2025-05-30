@@ -1,0 +1,204 @@
+import { formatNumber, NgFor, DatePipe } from '@angular/common';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { 
+  BarChart, 
+  ChevronDown, 
+  CreditCard, 
+  DollarSign, 
+  Home, 
+  PiggyBank, 
+  Plus, 
+  Search, 
+  ShoppingBag, 
+  TrendingDown, 
+  TrendingUp, 
+  Wallet,
+  LucideAngularModule
+} from 'lucide-angular';
+import { SpendingChartComponent } from '../components/spending-chart/spending-chart.component';
+
+interface Transaction {
+  id: number;
+  title: string;
+  category: string;
+  amount: number;
+  type: 'income' | 'expense';
+  date: Date;
+}
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    LucideAngularModule, 
+    NgFor,
+    NgClass,
+    SpendingChartComponent,
+    DatePipe
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.scss'
+})
+export class DashboardComponent {
+  // Datos para el gráfico de gastos
+  spendingData: number[] = [1200, 1900, 1500, 2000, 1800, 2200, 2500];
+  spendingLabels: string[] = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+  // Icons
+  readonly TrendingDown = TrendingDown;
+  readonly PiggyBank = PiggyBank;
+  readonly TrendingUp = TrendingUp;
+  readonly Search = Search;
+  readonly BarChart = BarChart;
+  readonly ChevronDown = ChevronDown;
+  readonly Wallet = Wallet;
+  readonly Plus = Plus;
+  readonly CreditCard = CreditCard;
+  readonly DollarSign = DollarSign;
+  readonly Home = Home;
+  readonly ShoppingBag = ShoppingBag;
+
+  // Data
+  readonly categories = ["All", "Income", "Expenses", "Transfers"];
+  selectedCategory = this.categories[0];
+  timeFilter: 'week' | 'month' | 'year' = 'month';
+
+  // Sample data
+  private total: number = 12458.90;
+  formattedTotal: string = "";
+  private income: number = 3245.50;
+  formattedIncome: string = "";
+  private expenses: number = 1876.30;
+  formattedExpenses: string = "";
+  private savings: number = 1369.20;
+  formattedSavings: string = "";
+
+  // Datos de ejemplo para transacciones recientes
+  recentTransactions: Transaction[] = [
+    {
+      id: 1,
+      title: 'Pago de nómina',
+      category: 'Ingresos',
+      amount: 2500,
+      type: 'income',
+      date: new Date('2025-05-28')
+    },
+    {
+      id: 2,
+      title: 'Supermercado',
+      category: 'Compras',
+      amount: 156.75,
+      type: 'expense',
+      date: new Date('2025-05-27')
+    },
+    {
+      id: 3,
+      title: 'Factura de luz',
+      category: 'Servicios',
+      amount: 85.90,
+      type: 'expense',
+      date: new Date('2025-05-26')
+    },
+    {
+      id: 4,
+      title: 'Cena restaurante',
+      category: 'Comida',
+      amount: 42.50,
+      type: 'expense',
+      date: new Date('2025-05-25')
+    },
+    {
+      id: 5,
+      title: 'Freelance',
+      category: 'Ingresos',
+      amount: 800,
+      type: 'income',
+      date: new Date('2025-05-24')
+    }
+  ];
+
+  // Datos de tarjetas resumen
+  summaryCards = [
+    {
+      title: 'Balance Total',
+      amount: 12500,
+      icon: this.Wallet,
+      trend: 'up',
+      change: 12.5,
+      color: 'bg-indigo-100 text-indigo-600'
+    },
+    {
+      title: 'Ingresos',
+      amount: 4500,
+      icon: this.TrendingUp,
+      trend: 'up',
+      change: 8.2,
+      color: 'bg-green-100 text-green-600'
+    },
+    {
+      title: 'Gastos',
+      amount: 2800,
+      icon: this.TrendingDown,
+      trend: 'down',
+      change: 3.1,
+      color: 'bg-red-100 text-red-600'
+    }
+  ];
+
+  constructor(@Inject(LOCALE_ID) public locale: string) {
+    this.formattedTotal = formatNumber(this.total, this.locale, '1.2-2');
+    this.formattedIncome = formatNumber(this.income, this.locale, '1.2-2');
+    this.formattedExpenses = formatNumber(this.expenses, this.locale, '1.2-2');
+    this.formattedSavings = formatNumber(this.savings, this.locale, '1.2-2');
+  }
+
+  // Formatear moneda
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2
+    }).format(value);
+  }
+
+  // Obtener clase de color para el tipo de transacción
+  getTransactionTypeColor(type: 'income' | 'expense'): string {
+    return type === 'income' ? 'text-green-600' : 'text-red-600';
+  }
+
+  changeCategory(name: string): void {
+    this.selectedCategory = name;
+    // En una aplicación real, aquí filtrarías las transacciones
+    console.log('Categoría cambiada a:', this.selectedCategory);
+  }
+
+  setTimeFilter(filter: 'week' | 'month' | 'year'): void {
+    this.timeFilter = filter;
+    // En una aplicación real, aquí actualizarías los datos del gráfico
+    console.log('Filtro de tiempo cambiado a:', this.timeFilter);
+  }
+
+  getTransactionIcon(type: string): any {
+    switch(type) {
+      case 'income':
+        return this.TrendingUp;
+      case 'expense':
+        return this.TrendingDown;
+      case 'transfer':
+        return this.DollarSign;
+      case 'shopping':
+        return this.ShoppingBag;
+      case 'bills':
+        return this.Home;
+      case 'groceries':
+        return this.ShoppingBag;
+      default:
+        return this.CreditCard;
+    }
+  }
+  
+  // Método para obtener el color de la transacción
+  getTransactionColor(type: string): string {
+    return type === 'income' ? '#10B981' : '#EF4444';
+  }
+}

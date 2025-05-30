@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  min-height: 100%;
+  background-color: #f8f9fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  
+  &:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.25rem 1.5rem;
+    
+    h2, h6 {
+      margin: 0;
+      font-weight: 600;
+      color: #344767;
+    }
+    
+    .text-sm {
+      font-size: 0.875rem;
+      color: #7b809a;
+    }
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+    
+    .numbers {
+      p {
+        font-size: 0.875rem;
+        color: #7b809a;
+        margin-bottom: 0.25rem;
+      }
+      
+      h4, h5 {
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.375;
+      }
+      
+      .text-sm {
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: #7b809a;
+      }
+    }
+    
+    .icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      
+      i {
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+  }
+}
+
+// Gradient backgrounds for icon cards
+.bg-gradient-primary {
+  background: linear-gradient(195deg, #49a3f1 0%, #1A73E8 100%);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(195deg, #66BB6A 0%, #43A047 100%);
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(195deg, #FFA726 0%, #FB8C00 100%);
+}
+
+.bg-gradient-info {
+  background: linear-gradient(195deg, #26C6DA 0%, #00ACC1 100%);
+}
+
+// Badge styles
+.badge {
+  padding: 0.5em 0.8em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  
+  &.bg-success {
+    background-color: #4caf50 !important;
+  }
+  
+  &.bg-danger {
+    background-color: #f44336 !important;
+  }
+  
+  &.bg-primary {
+    background-color: #1A73E8 !important;
+  }
+}
+
+// Form controls
+.form-select {
+  border: 1px solid #d2d6da;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #495057;
+  
+  &:focus {
+    border-color: #1A73E8;
+    box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1rem;
+    
+    .card-body {
+      padding: 1rem;
+    }
+  }
+  
+  .icon {
+    width: 40px !important;
+    height: 40px !important;
+    
+    i {
+      font-size: 1.25rem !important;
+    }
+  }
+}
+
+// Animation for loading
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+  
+  &:hover {
+    background: #a8a8a8;
+  }
+}

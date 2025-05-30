@@ -1,0 +1,234 @@
+<div class="dashboard-container">
+  <div class="header">
+    <div class="header-content">
+      <h1>Dashboard</h1>
+      <p class="welcome-message">Welcome! Here's your financial summary</p>
+    </div>
+    <div class="date-filter">
+      <button class="date-btn">
+  This Month 
+  <i-lucide [img]="ChevronDown" width="16" height="16"></i-lucide>
+</button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="stats-grid">
+    @for (card of summaryCards; track card.title) {
+      <div class="stat-card" [ngClass]="{'positive': card.trend === 'up', 'negative': card.trend === 'down'}">
+        <div class="stat-icon" [ngStyle]="{'background-color': card.style.split(';')[0].split(':')[1].trim(), 'color': card.style.split(';')[1].split(':')[1].trim()}">
+          <i-lucide [img]="card.icon" width="24" height="24"></i-lucide>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">{{ card.title }}</span>
+          <h2>{{ formatCurrency(card.amount) }}</h2>
+          <div class="trend {{ card.trend === 'up' ? 'positive' : 'negative' }}">
+            <i-lucide 
+              [img]="card.trend === 'up' ? TrendingUp : TrendingDown" 
+              width="16" 
+              height="16"
+              [style.color]="card.trend === 'up' ? '#10B981' : '#EF4444'">
+            </i-lucide>
+            <span>{{ card.change }}% from last month</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Spending Analytics Section -->
+  <div class="analytics-section">
+    <div class="section-header">
+      <h2>Spending by Category</h2>
+      <div class="time-filters">
+        <button [class.active]="timeFilter === 'week'" (click)="setTimeFilter('week')">Week</button>
+        <button [class.active]="timeFilter === 'month'" (click)="setTimeFilter('month')">Month</button>
+        <button [class.active]="timeFilter === 'year'" (click)="setTimeFilter('year')">Year</button>
+      </div>
+    </div>
+    
+    <div class="spending-table">
+      <div class="table-header">
+        <div class="category-col">Category</div>
+        <div class="amount-col">Amount</div>
+        <div class="percentage-col">% of Total</div>
+        <div class="chart-col">Distribution</div>
+      </div>
+      
+      <div class="table-body">
+        @for (category of spendingCategories; track category.name) {
+          <div class="table-row">
+            <div class="category-col">
+              <div class="category-info">
+                <div class="category-icon" [style.background]="category.color + '20'">
+                  <i-lucide 
+                    [img]="category.icon" 
+                    [size]="16"
+                    [style.color]="category.color">
+                  </i-lucide>
+                </div>
+                <span class="category-name">{{ category.name }}</span>
+              </div>
+            </div>
+            <div class="amount-col">
+              {{ formatCurrency(category.amount) }}
+            </div>
+            <div class="percentage-col">
+              {{ category.percentage }}%
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container">
+                <div 
+                  class="chart-bar" 
+                  [style.width]="category.percentage + '%'"
+                  [style.background]="category.color">
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      
+      <div class="table-footer">
+        <div class="total-label">Total Spent:</div>
+        <div class="total-amount">{{ formatCurrency(totalSpent) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="transactions-section">
+    <div class="section-header">
+      <h2>Recent Transactions</h2>
+      <button class="view-all">View All</button>
+    </div>
+    
+    <div class="transactions-filters">
+      <div class="search-bar">
+        <i-lucide [img]="Search" width="16" height="16" color="#94A3B8" class="search-icon"></i-lucide>
+        <input type="text" placeholder="Search transactions..." class="search-input">
+      </div>
+      
+      <div class="transaction-categories">
+        @for (category of categories; track category) {
+          <button 
+            class="category-tab" 
+            [class.active]="selectedCategory === category"
+            (click)="changeCategory(category)">
+            {{ category }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="transactions-list">
+      <div class="transactions-header">
+        <div class="header-col description">Description</div>
+        <div class="header-col category">Category</div>
+        <div class="header-col date">Date</div>
+        <div class="header-col status">Status</div>
+        <div class="header-col amount">Amount</div>
+      </div>
+      
+      @if (recentTransactions.length === 0) {
+        <div class="empty-state">
+          <i-lucide [img]="FileText" size="48" class="empty-icon"></i-lucide>
+          <h3>No transactions found</h3>
+          <p>Try adjusting your search or filter criteria</p>
+          <button class="btn-primary" (click)="resetFilters()">
+            <i-lucide [img]="Filter" size="16"></i-lucide>
+            Reset Filters
+          </button>
+        </div>
+      } @else {
+        @for (transaction of paginatedTransactions; track transaction.id) {
+          <div 
+            class="transaction-item" 
+            [class.pending]="transaction.status === 'pending'" 
+            [class.failed]="transaction.status === 'failed'"
+            [style.color]="transaction.color">
+            <div class="transaction-main">
+              <div class="transaction-icon" [style.background]="transaction.color + '20'">
+                <i-lucide 
+                  [img]="transaction.icon" 
+                  [size]="16"
+                  [style.color]="transaction.color">
+                </i-lucide>
+              </div>
+              <div class="transaction-details">
+                <div class="transaction-description">
+                  {{ transaction.title }}
+                  <span class="transaction-note" *ngIf="transaction.notes" [title]="transaction.notes">
+                    <i-lucide [img]="Info" size="12"></i-lucide>
+                  </span>
+                </div>
+                <div class="transaction-tags" *ngIf="transaction.tags?.length">
+                  @for (tag of transaction.tags; track $index) {
+                    <span class="tag">{{ tag }}</span>
+                  }   
+                </div>
+              </div>
+            </div>
+            
+            <div class="transaction-category">
+              <span class="category-badge" [style.background]="transaction.color + '20'" [style.color]="transaction.color">
+                {{ transaction.category }}
+              </span>
+            </div>
+            
+            <div class="transaction-date">
+              {{ transaction.date | date:'MMM d, y' }}
+              <div class="payment-method">
+                <i-lucide [img]="getPaymentMethodIcon(transaction.paymentMethod)" size="12"></i-lucide> 
+                {{ transaction.paymentMethod }}
+              </div>
+            </div>
+            
+            <div class="transaction-status">
+              <span class="status-badge" [class.completed]="transaction.status === 'completed'"
+                                         [class.pending]="transaction.status === 'pending'"
+                                         [class.failed]="transaction.status === 'failed'">
+                {{ transaction.status | titlecase }}
+              </span>
+            </div>
+            
+            <div class="transaction-amount" [class.income]="transaction.type === 'income'" 
+                                             [class.expense]="transaction.type === 'expense'"
+                                             [class.transfer]="transaction.type === 'transfer'">
+              <span class="amount">
+                {{ transaction.type === 'income' ? '+' : (transaction.type === 'expense' ? '-' : '') }}{{ formatCurrency(transaction.amount) }}
+              </span>
+              <div class="transaction-reference">Ref: {{ transaction.reference }}</div>
+            </div>
+          </div>
+        }
+      }
+      
+      <!-- Pagination -->
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i-lucide [img]="ChevronLeft" size="16"></i-lucide>
+          </button>
+          
+          @for (page of [].constructor(totalPages); track $index; let i = $index) {
+            <button 
+              [class.active]="currentPage === i + 1" 
+              (click)="changePage(i + 1)">
+              {{ i + 1 }}
+            </button>
+          }
+          
+          <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i-lucide [img]="ChevronRight" size="16"></i-lucide>
+          </button>
+        </div>
+      }
+    </div>
+    
+    <button class="add-transaction-btn">
+      <i-lucide [img]="Plus" size="16"></i-lucide>
+      Add Transaction
+    </button>
+  </div>
+</div>
