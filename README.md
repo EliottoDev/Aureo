@@ -1,11 +1,10 @@
 <div align="center">
   <img src="images/logo.png" alt="Aureo Logo" width="200"/>
   
-  # Aureo - Smart Investment Platform
+  # Aureo - Finances Modern App
   
   [![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 
   A comprehensive platform for managing and tracking investments in financial markets.
 </div>
@@ -99,15 +98,8 @@ Contributions are welcome! Please read our [contribution guidelines](CONTRIBUTIN
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ✨ Credits
-
-- [Angular](https://angular.io/)
-- [Bootstrap](https://getbootstrap.com/)
-- [ApexCharts](https://apexcharts.com/)
-- [Lucide Icons](https://lucide.dev/)
-
 ---
 
 <div align="center">
-  Made with ❤️ by the Aureo team
+  Made with ❤️ by Elias D.E.
 </div>
